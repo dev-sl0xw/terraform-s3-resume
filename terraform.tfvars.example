@@ -1,0 +1,39 @@
+# AWS 리전 설정
+# CloudFront용 ACM 인증서는 us-east-1에 생성되어야 하지만,
+# 다른 리소스는 원하는 리전에 생성할 수 있습니다.
+aws_region = "us-east-1"
+
+# 환경 이름 (dev, staging, prod)
+environment = "prod"
+
+# S3 버킷 이름 (전역적으로 고유해야 함)
+# 소문자, 숫자, 하이픈만 사용 가능
+# 예: "my-resume-bucket-2024"
+bucket_name = "your-unique-bucket-name"
+
+# 이력서 PDF 파일 이름
+# S3에 업로드할 파일 이름과 일치해야 함
+resume_filename = "resume.pdf"
+
+# 커스텀 도메인 (이력서 접근용)
+# Route53에 호스팅 영역이 있어야 함
+# 예: "resume.yourdomain.com"
+custom_domain = "resume.yourdomain.com"
+
+# Route53 호스팅 영역의 루트 도메인
+# 예: "yourdomain.com"
+root_domain = "yourdomain.com"
+
+# 추가 태그 (선택사항)
+# 모든 리소스에 적용됩니다
+tags = {
+  Owner       = "Your Name"
+  CostCenter  = "Personal"
+  Description = "Resume Hosting Infrastructure"
+}
+
+# 프리 티어 최적화 권장 사항:
+# - bucket_name: 고유한 이름 사용
+# - aws_region: us-east-1 권장 (ACM 인증서 요구사항)
+# - CloudFront Price Class는 코드에서 PriceClass_100으로 설정됨 (북미, 유럽만)
+# - S3 Standard 스토리지 클래스 사용 (프리 티어 포함)
