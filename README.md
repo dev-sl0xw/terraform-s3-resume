@@ -22,7 +22,12 @@ terraform-s3-resume/
 ├── route53.tf                # Route53 DNS 레코드
 ├── terraform.tfvars.example  # 변수 예제 파일
 ├── .gitignore                # Git 무시 파일
-└── README.md                 # 이 파일
+├── README.md                 # 이 파일
+└── tests/                    # 인프라 검증 테스트
+    ├── test_s3_bucket_config.py  # S3 버킷 구성 테스트
+    ├── requirements.txt          # Python 의존성
+    ├── pytest.ini                # pytest 설정
+    └── run_tests.sh              # 테스트 실행 스크립트
 ```
 
 ## 사전 요구사항
@@ -103,7 +108,9 @@ terraform destroy
 ## 구현 상태
 
 - [x] Task 1: Terraform 프로젝트 구조 및 기본 구성 설정
-- [ ] Task 2: S3 버킷 리소스 구현
+- [x] Task 2: S3 버킷 리소스 구현
+  - [x] 2.1 S3 버킷 생성 및 기본 구성
+  - [x] 2.2 S3 버킷 구성 검증 테스트 작성 (4개 테스트 통과)
 - [ ] Task 3: CloudFront Origin Access Control 및 S3 버킷 정책 구현
 - [ ] Task 4: ACM SSL 인증서 프로비저닝
 - [ ] Task 5: CloudFront 배포 구성
@@ -112,6 +119,24 @@ terraform destroy
 - [ ] Task 9: 엔드투엔드 통합 테스트
 - [ ] Task 10: 문서 및 운영 가이드 작성
 - [ ] Task 11: 최종 검증 및 정리
+
+## 테스트 실행
+
+S3 버킷 구성 검증 테스트를 실행하려면:
+
+```bash
+# 의존성 설치
+pip install -r tests/requirements.txt
+
+# 테스트 실행
+python3 -m pytest tests/test_s3_bucket_config.py -v
+```
+
+현재 구현된 테스트:
+- `test_s3_bucket_exists` - S3 버킷 존재 확인
+- `test_s3_versioning_enabled` - 버전 관리 활성화 확인
+- `test_s3_public_access_blocked` - 공개 접근 차단 확인
+- `test_s3_bucket_tags` - 태그 검증
 
 ## 라이선스
 
