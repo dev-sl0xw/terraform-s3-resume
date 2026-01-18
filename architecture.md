@@ -58,13 +58,15 @@
 
 ## AWS 컴포넌트 목록
 
-| 컴포넌트 | AWS 서비스 | 역할 |
-|---------|-----------|------|
-| Route53 | Amazon Route 53 | DNS 관리, A Record Alias |
-| ACM | AWS Certificate Manager | SSL/TLS 인증서 (us-east-1) |
-| CloudFront | Amazon CloudFront | CDN, HTTPS 강제, 캐싱 |
-| OAC | CloudFront Origin Access Control | S3 보안 접근 제어 |
-| S3 | Amazon S3 | PDF 이력서 저장 (비공개) |
+| 컴포넌트 | AWS 서비스 | 역할 | 관리 방식 |
+|---------|-----------|------|----------|
+| Route53 | Amazon Route 53 | DNS 관리, A Record Alias | 수동 등록 (Terraform 외부) |
+| ACM | AWS Certificate Manager | SSL/TLS 인증서 (us-east-1) | Terraform |
+| CloudFront | Amazon CloudFront | CDN, HTTPS 강제, 캐싱 | Terraform |
+| OAC | CloudFront Origin Access Control | S3 보안 접근 제어 | Terraform |
+| S3 | Amazon S3 | PDF 이력서 저장 (비공개) | Terraform |
+
+> **참고**: Route53 호스팅 영역 및 DNS 레코드는 수동으로 등록되었으며, Terraform으로 관리되지 않습니다.
 
 ## 데이터 흐름
 
@@ -93,12 +95,12 @@
 
 ## 비용 최적화
 
-| 서비스 | 프리 티어 한도 | 설정 |
-|-------|---------------|------|
-| S3 | 5GB 스토리지, 20,000 GET/월 | Standard 스토리지 클래스 |
-| CloudFront | 1TB 전송, 10M 요청/월 | PriceClass_100 (북미, 유럽) |
-| Route53 | 100만 쿼리/월 | 호스팅 영역 $0.50/월 |
-| ACM | 무료 | 공개 인증서 |
+| 서비스 | 프리 티어 한도 | 설정 | 비고 |
+|-------|---------------|------|------|
+| S3 | 5GB 스토리지, 20,000 GET/월 | Standard 스토리지 클래스 | Terraform 관리 |
+| CloudFront | 1TB 전송, 10M 요청/월 | PriceClass_100 (북미, 유럽) | Terraform 관리 |
+| Route53 | 100만 쿼리/월 | 호스팅 영역 $0.50/월 | 수동 등록 |
+| ACM | 무료 | 공개 인증서 | Terraform 관리 |
 
 ## draw.io 작성 가이드
 
