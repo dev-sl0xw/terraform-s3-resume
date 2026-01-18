@@ -15,8 +15,9 @@ Kiro의 Spec 기능을 활용하여 요구사항 정의부터 설계, 구현 태
 
 - **S3**: PDF 이력서 파일 저장 (비공개)
 - **CloudFront**: CDN을 통한 전 세계적 콘텐츠 전송
-- **Route53**: 커스텀 도메인 DNS 관리
 - **ACM**: 무료 SSL/TLS 인증서
+
+> **참고**: Route53은 이 프로젝트에서 사용하지 않습니다. 지인의 도메인에서 서브도메인을 빌려 사용하고 있어, DNS 레코드(ACM 검증용 CNAME, CloudFront 연결용 CNAME)는 지인의 DNS 서버에서 수동으로 관리합니다.
 
 ## 프로젝트 구조
 
@@ -28,7 +29,6 @@ terraform-s3-resume/
 ├── s3.tf                     # S3 버킷 리소스
 ├── cloudfront.tf             # CloudFront 배포 리소스
 ├── acm.tf                    # ACM 인증서 리소스
-├── route53.tf                # Route53 DNS 레코드
 ├── terraform.tfvars.example  # 변수 예제 파일
 ├── .gitignore                # Git 무시 파일
 ├── README.md                 # 이 파일
@@ -44,7 +44,7 @@ terraform-s3-resume/
 1. **AWS 계정**: 활성화된 AWS 계정
 2. **Terraform**: 버전 1.0 이상 설치
 3. **AWS CLI**: 구성된 AWS 자격 증명
-4. **Route53 호스팅 영역**: 도메인에 대한 호스팅 영역 존재
+4. **커스텀 도메인** (선택): 별도 계정의 Route53 또는 외부 DNS에서 관리
 
 ## 초기 설정
 
@@ -101,10 +101,9 @@ aws cloudfront create-invalidation --distribution-id YOUR_DIST_ID --paths '/*'
 
 - **S3**: 5GB 스토리지, 20,000 GET 요청/월
 - **CloudFront**: 1TB 데이터 전송, 10,000,000 요청/월
-- **Route53**: $0.50/월 (호스팅 영역)
 - **ACM**: 무료
 
-예상 월간 비용: **$0.50 ~ $1.50**
+예상 월간 비용: **$0 ~ $1.00** (프리 티어 내)
 
 ## 정리
 
