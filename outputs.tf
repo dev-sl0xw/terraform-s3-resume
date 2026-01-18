@@ -9,21 +9,26 @@ output "s3_bucket_arn" {
   value       = aws_s3_bucket.resume_bucket.arn
 }
 
-# CloudFront Outputs (uncomment after CloudFront is deployed)
-# output "cloudfront_distribution_id" {
-#   description = "CloudFront 배포 ID"
-#   value       = aws_cloudfront_distribution.resume_distribution.id
-# }
+# CloudFront Outputs
+output "cloudfront_distribution_id" {
+  description = "CloudFront 배포 ID"
+  value       = aws_cloudfront_distribution.resume_distribution.id
+}
 
-# output "cloudfront_domain_name" {
-#   description = "CloudFront 배포 도메인 이름"
-#   value       = aws_cloudfront_distribution.resume_distribution.domain_name
-# }
+output "cloudfront_distribution_arn" {
+  description = "CloudFront 배포 ARN"
+  value       = aws_cloudfront_distribution.resume_distribution.arn
+}
 
-# output "cloudfront_url" {
-#   description = "CloudFront를 통한 이력서 전체 URL"
-#   value       = "https://${aws_cloudfront_distribution.resume_distribution.domain_name}/${var.resume_filename}"
-# }
+output "cloudfront_domain_name" {
+  description = "CloudFront 배포 도메인 이름"
+  value       = aws_cloudfront_distribution.resume_distribution.domain_name
+}
+
+output "cloudfront_oac_id" {
+  description = "CloudFront Origin Access Control ID"
+  value       = aws_cloudfront_origin_access_control.resume_oac.id
+}
 
 # output "custom_domain_url" {
 #   description = "커스텀 도메인을 통한 이력서 URL"

@@ -29,27 +29,27 @@
     - 공개 접근 차단 확인 테스트
     - _요구사항: 1.1, 1.3, 1.5_
   
-  - [ ]* 2.3 S3 메타데이터 보존 속성 테스트 작성
+  - [x] 2.3 S3 메타데이터 보존 속성 테스트 작성
     - **속성 1: S3 업로드 메타데이터 보존**
     - **검증: 요구사항 1.2**
     - hypothesis를 사용하여 임의의 PDF 파일 생성
     - S3 업로드 후 Content-Type 및 메타데이터 확인
     - 최소 100회 반복 실행
 
-- [-] 3. CloudFront Origin Access Control 및 S3 버킷 정책 구현
-  - [ ] 3.1 Origin Access Control 생성
+- [x] 3. CloudFront Origin Access Control 및 S3 버킷 정책 구현
+  - [x] 3.1 Origin Access Control 생성
     - cloudfront.tf 파일 생성
     - aws_cloudfront_origin_access_control 리소스 정의
     - signing_behavior를 "always"로, signing_protocol을 "sigv4"로 설정
     - _요구사항: 2.4, 7.2_
   
-  - [ ] 3.2 S3 버킷 정책 구성
+  - [x] 3.2 S3 버킷 정책 구성
     - s3.tf에 aws_s3_bucket_policy 리소스 추가
     - CloudFront Service Principal만 허용하는 정책 작성
     - AWS:SourceArn 조건으로 특정 CloudFront 배포만 허용
     - _요구사항: 2.4, 7.2_
   
-  - [ ]* 3.3 OAC 및 버킷 정책 검증 테스트
+  - [x] 3.3 OAC 및 버킷 정책 검증 테스트
     - OAC 리소스 생성 확인
     - S3 직접 접근 차단 확인 (403 응답)
     - _요구사항: 2.4, 7.2_
