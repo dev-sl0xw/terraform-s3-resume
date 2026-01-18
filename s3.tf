@@ -31,3 +31,32 @@ resource "aws_s3_bucket_public_access_block" "resume_public_access_block" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+# S3 버킷 정책
+# 요구사항 2.4, 7.2: CloudFront OAC만 S3 버킷에 접근 허용
+resource "aws_s3_bucket_policy" "resume_bucket_policy" {
+  bucket = aws_s3_bucket.resume_bucket.id
+  
+  # public_access_block이 먼저 적용되어야 함
+  depends_on = [aws_s3_bucket_public_access_block.resume_public_access_block]
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.resume_bucket.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = aws_cloudfront_distribution.resume_distribution.arn
+          }
+        }
+      }
+    ]
+  })
+}
