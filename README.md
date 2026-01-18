@@ -12,17 +12,7 @@ Kiro의 Spec 기능을 활용하여 요구사항 정의부터 설계, 구현 태
 
 ## 아키텍처
 
-```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   사용자    │────▶│  CloudFront │────▶│     S3      │
-│  (HTTPS)    │     │    (CDN)    │     │  (Private)  │
-└─────────────┘     └─────────────┘     └─────────────┘
-                           │
-                    ┌──────┴──────┐
-                    │     ACM     │
-                    │ (SSL 인증서) │
-                    └─────────────┘
-```
+![Resume Hosting Infrastructure](generated-diagrams/resume-architecture.png)
 
 - **S3**: PDF 이력서 파일 저장 (비공개, OAC로 CloudFront만 접근)
 - **CloudFront**: CDN을 통한 전 세계적 콘텐츠 전송, HTTPS 리디렉션
