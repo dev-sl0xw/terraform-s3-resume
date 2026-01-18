@@ -1,13 +1,24 @@
 # CloudFront 배포 리소스
-# Task 3, 5에서 구현 예정
+# 요구사항 2.1, 2.4, 7.2 구현
+
+# Origin Access Control (OAC) 생성
+# 요구사항 2.4, 7.2: S3 버킷에 안전하게 접근하기 위한 OAC 구성
+resource "aws_cloudfront_origin_access_control" "resume_oac" {
+  name                              = "resume-oac-${var.environment}"
+  description                       = "OAC for Resume S3 Bucket"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
+}
 
 resource "aws_cloudfront_distribution" "resume_distribution" {
   enabled = true
-  comment = "Resume hosting distribution - to be implemented"
+  comment = "Resume hosting distribution"
   
   origin {
-    domain_name = aws_s3_bucket.resume_bucket.bucket_regional_domain_name
-    origin_id   = "S3-${aws_s3_bucket.resume_bucket.id}"
+    domain_name              = aws_s3_bucket.resume_bucket.bucket_regional_domain_name
+    origin_id                = "S3-${aws_s3_bucket.resume_bucket.id}"
+    origin_access_control_id = aws_cloudfront_origin_access_control.resume_oac.id
   }
   
   default_cache_behavior {
