@@ -14,6 +14,7 @@
 - **Terraform_Configuration**: AWS 리소스를 정의하고 프로비저닝하는 Infrastructure as Code 파일
 - **Route53_Record**: 커스텀 도메인을 CloudFront에 매핑하는 DNS 레코드
 - **Origin_Access_Identity**: 버킷을 공개하지 않고 S3에 안전하게 접근하는 CloudFront 자격 증명
+- **Portfolio_Site**: Astro로 개발된 반응형 정적 웹사이트로, GitHub 링크, 아키텍처 다이어그램, 이력서 다운로드 기능을 제공. 기존 S3_Bucket에 함께 저장됨
 
 ## 요구사항
 
@@ -117,3 +118,20 @@
 8. S3_Bucket은 추가 비용이 발생하는 불필요한 기능(예: 분석, 복제, 수명 주기 정책)을 활성화하지 않아야 합니다
 9. Resume_Hosting_System은 프리 티어 한도 초과를 방지하기 위해 최소한의 리소스만 사용해야 합니다
 10. Terraform_Configuration은 프리 티어 사용량을 모니터링할 수 있는 가이드를 문서에 포함해야 합니다
+
+### 요구사항 9: 포트폴리오 정적 사이트 확장 (단일 버킷 방식)
+
+**사용자 스토리:** 이력서 소유자로서, 포트폴리오 정적 사이트를 통해 프로젝트 정보, 아키텍처, 이력서 파일들을 한 곳에서 보여주어 채용 담당자가 나의 기술 역량을 종합적으로 확인할 수 있기를 원합니다.
+
+#### 수락 기준 9
+
+1. 기존 S3_Bucket에 Astro 빌드 결과물(정적 파일)과 이력서 PDF를 함께 저장해야 합니다
+2. Portfolio_Site는 이 프로젝트의 GitHub Repository URL을 표시해야 합니다
+3. Portfolio_Site는 프로젝트 아키텍처 다이어그램(architecture diagram)을 표시해야 합니다
+4. Portfolio_Site는 이력서 PDF 파일 다운로드 링크를 제공해야 합니다
+5. 기존 CloudFront_Distribution의 default_root_object를 index.html로 변경해야 합니다
+6. CloudFront_Distribution은 SPA 라우팅을 위한 커스텀 에러 응답(404 → index.html)을 설정해야 합니다
+7. Portfolio_Site는 Astro로 개발되고 반응형 디자인으로 모바일과 데스크톱에서 모두 최적화되어야 합니다
+8. 기존 커스텀 도메인(slow0x.er.ht)으로 포트폴리오 사이트에 접근 가능해야 합니다
+9. 이력서 PDF는 /resume.pdf 경로로 계속 접근 가능해야 합니다
+10. Portfolio_Site는 AWS 프리 티어 범위 내에서 운영되어야 합니다 (추가 리소스 없음)

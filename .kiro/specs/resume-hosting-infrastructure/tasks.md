@@ -53,3 +53,47 @@ Terraform을 사용하여 AWS에서 PDF 이력서를 호스팅하는 인프라�
 - Route53은 사용하지 않음 (지인 DNS 서버에서 수동 관리)
 - DNS 레코드: ACM 검증용 CNAME, CloudFront 연결용 CNAME
 - 모든 Terraform 코드는 HCL로 작성됨
+
+---
+
+## 확장 작업: 포트폴리오 정적 사이트 (요구사항 9 - 단일 버킷 방식)
+
+### 작업 목록
+
+- [x] 7. CloudFront 설정 변경 (포트폴리오 사이트 지원)
+  - [x] 7.1 cloudfront.tf에서 default_root_object를 index.html로 변경
+  - [x] 7.2 SPA 라우팅을 위한 custom_error_response 추가 (404 → index.html)
+  - [x] 7.3 terraform apply로 CloudFront 설정 업데이트
+  - [x] 7.4 CloudFront 설정 변경 검증
+
+- [x] 8. Astro 포트폴리오 사이트 개발
+  - [x] 8.1 Astro 프로젝트 초기화 (portfolio-site/)
+  - [x] 8.2 반응형 레이아웃 컴포넌트 구현 (모바일/데스크톱)
+  - [x] 8.3 GitHub Repository URL 표시 섹션 구현
+  - [x] 8.4 아키텍처 다이어그램 표시 섹션 구현
+  - [x] 8.5 이력서 PDF 다운로드 링크 구현 (/resume.pdf)
+
+- [x] 9. 포트폴리오 사이트 배포 및 검증
+  - [x] 9.1 Astro 빌드 (npm run build)
+  - [x] 9.2 기존 S3 버킷에 빌드 결과물 업로드 (aws s3 sync)
+  - [x] 9.3 CloudFront 캐시 무효화
+  - [x] 9.4 `https://slow0x.er.ht/` 접근 검증 (포트폴리오 메인)
+  - [x] 9.5 `https://slow0x.er.ht/resume.pdf` 접근 검증 (이력서)
+  - [x] 9.6 반응형 디자인 테스트 (모바일/데스크톱)
+
+### 인프라 변경 사항 (단일 버킷 방식)
+
+| 항목 | 변경 전 | 변경 후 |
+|------|---------|---------|
+| default_root_object | resume.pdf | index.html |
+| custom_error_response | 없음 | 404 → index.html |
+| S3 버킷 | 기존 유지 | 기존 유지 (Astro 빌드 추가) |
+| CloudFront | 기존 유지 | 설정만 변경 |
+| ACM 인증서 | 기존 유지 | 기존 유지 |
+
+### 기술 스택
+
+- **프레임워크**: Astro
+- **스타일링**: CSS (반응형)
+- **인프라**: 기존 Terraform 리소스 재활용
+- **배포**: 기존 S3 + CloudFront

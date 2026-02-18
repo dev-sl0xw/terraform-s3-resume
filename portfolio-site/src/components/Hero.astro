@@ -1,0 +1,95 @@
+---
+interface Props {
+  name: string;
+  tagline: string;
+}
+
+const { name, tagline } = Astro.props;
+---
+
+<section class="hero">
+  <div class="container hero-content">
+    <h1 class="hero-title">{name}</h1>
+    <p class="hero-tagline">{tagline}</p>
+    <div class="hero-actions">
+      <a href="/resume.pdf" class="btn btn-hero">📄 Download Resume</a>
+      <a href="#architecture" class="btn btn-outline">🏗️ View Architecture</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background-color: var(--color-primary);
+    padding: var(--spacing-xl) 0;
+    border-bottom: var(--border-thick);
+  }
+
+  .hero-content {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    text-shadow: 3px 3px 0px #000000;
+  }
+
+  .hero-tagline {
+    font-size: 1.25rem;
+    color: #FFFFFF;
+    font-weight: 600;
+    margin-bottom: var(--spacing-lg);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-hero {
+    background-color: #FFFFFF;
+    color: #000000;
+  }
+
+  .btn-hero:hover {
+    background-color: var(--color-accent-yellow);
+    color: #000000;
+  }
+
+  .btn-outline {
+    background-color: #FFFFFF;
+    color: #000000;
+    border: var(--border-thick);
+  }
+
+  .btn-outline:hover {
+    background-color: var(--color-accent-yellow);
+    color: #000000;
+  }
+
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2.25rem;
+    }
+
+    .hero-tagline {
+      font-size: 1rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+</style>

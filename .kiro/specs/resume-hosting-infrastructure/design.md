@@ -1245,3 +1245,193 @@ aws budgets create-budget \
 - [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/) - 아키텍처 베스트 프랙티스
 
 *내용은 라이선스 제한 준수를 위해 재구성되었습니다.*
+
+---
+
+## 확장 설계: 포트폴리오 정적 사이트 (단일 버킷 방식)
+
+### 개요
+
+기존 이력서 호스팅 인프라를 확장하여 Astro 기반의 반응형 포트폴리오 정적 사이트를 추가합니다. **새로운 S3 버킷이나 CloudFront 배포를 생성하지 않고**, 기존 인프라를 재활용하여 비용을 최소화합니다.
+
+핵심 설계 결정:
+- **단일 S3 버킷**: 기존 `resume-hosting-test-20260118` 버킷에 Astro 빌드 결과물과 이력서 PDF를 함께 저장
+- **기존 CloudFront 활용**: 기존 배포의 설정만 변경 (default_root_object, custom_error_response)
+- **동일 도메인 유지**: `https://slow0x.er.ht/`로 포트폴리오 사이트 접근
+- **추가 비용 없음**: 새로운 AWS 리소스 생성 없이 프리 티어 범위 유지
+
+### 확장 아키텍처 (단일 버킷)
+
+```mermaid
+graph TB
+    User[방문자]
+    DNS[외부 DNS<br/>CNAME 레코드]
+    CDN[CloudFront Distribution<br/>E27JDTW678QD8T]
+    OAC[Origin Access Control<br/>보안 인증]
+    S3[S3 Bucket<br/>resume-hosting-test-20260118]
+    ACM[ACM Certificate<br/>SSL/TLS]
+    
+    subgraph "S3 버킷 구조"
+        Index[index.html<br/>Astro 메인 페이지]
+        Assets[assets/<br/>CSS, JS, 이미지]
+        Resume[resume.pdf<br/>이력서 파일]
+    end
+    
+    User -->|slow0x.er.ht| DNS
+    DNS -->|CNAME| CDN
+    ACM -.->|SSL 인증서| CDN
+    CDN -->|OAC 인증| OAC
+    OAC -->|보안 접근| S3
+    
+    S3 --> Index
+    S3 --> Assets
+    S3 --> Resume
+    
+    style S3 fill:#ff9900
+    style CDN fill:#8c4fff
+    style DNS fill:#4b612c
+    style ACM fill:#dd344c
+    style OAC fill:#146eb4
+```
+
+### CloudFront 설정 변경
+
+#### 1. default_root_object 변경 (cloudfront.tf)
+
+**변경 전**: `resume.pdf`
+**변경 후**: `index.html`
+
+```hcl
+resource "aws_cloudfront_distribution" "resume_distribution" {
+  enabled             = true
+  comment             = "Resume and Portfolio hosting distribution"
+  default_root_object = "index.html"  # 변경: resume.pdf → index.html
+  
+  # ... 기존 설정 유지 ...
+}
+```
+
+#### 2. SPA 라우팅을 위한 커스텀 에러 응답 추가
+
+Astro 사이트의 클라이언트 사이드 라우팅을 지원하기 위해 404 에러를 index.html로 리디렉션합니다.
+
+```hcl
+resource "aws_cloudfront_distribution" "resume_distribution" {
+  # ... 기존 설정 ...
+  
+  # SPA 라우팅을 위한 커스텀 에러 응답 추가
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+  
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+}
+```
+
+### S3 버킷 구조
+
+기존 S3 버킷에 다음과 같은 구조로 파일을 저장합니다:
+
+```
+resume-hosting-test-20260118/
+├── index.html              # Astro 메인 페이지
+├── resume.pdf              # 이력서 파일 (기존 위치 유지)
+├── _astro/                 # Astro 빌드 에셋
+│   ├── *.css
+│   └── *.js
+├── architecture.png        # 아키텍처 다이어그램
+└── favicon.ico             # 파비콘
+```
+
+### URL 구조
+
+| URL | 설명 |
+|-----|------|
+| `https://slow0x.er.ht/` | 포트폴리오 메인 페이지 (index.html) |
+| `https://slow0x.er.ht/resume.pdf` | 이력서 PDF 다운로드 |
+| `https://slow0x.er.ht/_astro/*` | Astro 정적 에셋 |
+### Astro 프로젝트 구조
+
+```
+portfolio-site/
+├── src/
+│   ├── components/
+│   │   ├── Header.astro
+│   │   ├── Footer.astro
+│   │   ├── ProjectCard.astro
+│   │   └── ResumeDownload.astro
+│   ├── layouts/
+│   │   └── MainLayout.astro
+│   ├── pages/
+│   │   └── index.astro
+│   └── styles/
+│       └── global.css
+├── public/
+│   ├── resume.pdf           # 이력서 파일 (빌드 시 복사)
+│   ├── architecture.png     # 아키텍처 다이어그램
+│   └── favicon.ico
+├── astro.config.mjs
+├── package.json
+└── tsconfig.json
+```
+
+### 포트폴리오 사이트 기능
+
+1. **GitHub Repository 링크**: 프로젝트 소스 코드 저장소 링크
+2. **아키텍처 다이어그램**: 인프라 구성도 이미지 표시
+3. **이력서 다운로드**: `/resume.pdf` 경로로 직접 다운로드 링크
+4. **반응형 디자인**: 모바일/데스크톱 최적화
+
+### Terraform 변수 추가 (선택사항)
+
+```hcl
+variable "github_repo_url" {
+  description = "GitHub Repository URL"
+  type        = string
+  default     = ""
+}
+```
+
+### 배포 프로세스
+
+1. **Astro 빌드**:
+   ```bash
+   cd portfolio-site
+   npm run build
+   ```
+
+2. **S3 업로드** (기존 버킷에 덮어쓰기):
+   ```bash
+   aws s3 sync dist/ s3://resume-hosting-test-20260118/ --delete
+   ```
+
+3. **CloudFront 캐시 무효화**:
+   ```bash
+   aws cloudfront create-invalidation --distribution-id E27JDTW678QD8T --paths "/*"
+   ```
+
+### 정확성 속성 (요구사항 9)
+
+#### 속성 9.1: Astro 빌드 결과물 저장
+
+기존 S3_Bucket에 Astro 빌드 결과물이 업로드되면, 정적 파일(HTML, CSS, JS)과 이력서 PDF가 함께 올바르게 저장되어야 합니다.
+
+**검증: 요구사항 9.1**
+
+#### 예제 테스트 9.2-9.10
+
+- **9.2**: Portfolio_Site에서 GitHub Repository URL이 표시되어야 함
+- **9.3**: Portfolio_Site에서 아키텍처 다이어그램이 표시되어야 함
+- **9.4**: Portfolio_Site에서 이력서 PDF 다운로드 링크가 작동해야 함
+- **9.5**: CloudFront default_root_object가 index.html로 설정되어야 함
+- **9.6**: CloudFront에 SPA 라우팅용 커스텀 에러 응답(404 → index.html)이 설정되어야 함
+- **9.7**: Portfolio_Site가 모바일과 데스크톱에서 반응형으로 표시되어야 함
+- **9.8**: 기존 커스텀 도메인(slow0x.er.ht)으로 포트폴리오 사이트에 접근 가능해야 함
+- **9.9**: 이력서 PDF가 /resume.pdf 경로로 계속 접근 가능해야 함
+- **9.10**: 추가 AWS 리소스 없이 프리 티어 범위 내에서 운영되어야 함
