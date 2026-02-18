@@ -1,0 +1,29 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import ArchitectureSection from '../components/ArchitectureSection.astro';
+import GitHubSection from '../components/GitHubSection.astro';
+import ResumeDownload from '../components/ResumeDownload.astro';
+import Footer from '../components/Footer.astro';
+
+const GITHUB_REPO_URL = 'https://github.com/dev-sl0xw/terraform-s3-resume';
+---
+
+<MainLayout title="Portfolio | AWS Infrastructure">
+  <Header title="Portfolio" />
+  <main>
+    <Hero 
+      name="AWS Resume Hosting" 
+      tagline="Serverless infrastructure for hosting resume using S3, CloudFront, and Terraform"
+    />
+    <ArchitectureSection />
+    <GitHubSection 
+      repoUrl={GITHUB_REPO_URL}
+      repoName="terraform-s3-resume"
+      description="Terraform IaC for AWS S3 + CloudFront resume hosting with custom domain and HTTPS"
+    />
+    <ResumeDownload />
+  </main>
+  <Footer />
+</MainLayout>

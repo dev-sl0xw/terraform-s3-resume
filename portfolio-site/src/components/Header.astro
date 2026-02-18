@@ -1,0 +1,83 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'Portfolio' } = Astro.props;
+---
+
+<header class="header">
+  <div class="container header-content">
+    <a href="/" class="logo">{title}</a>
+    <nav class="nav">
+      <a href="#architecture">Architecture</a>
+      <a href="#github">GitHub</a>
+      <a href="/resume.pdf">Resume</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    background-color: #000000;
+    border-bottom: var(--border-thick);
+    z-index: 100;
+  }
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+  }
+
+  .logo:hover {
+    text-decoration: none;
+    color: var(--color-primary);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+  }
+
+  .nav a {
+    color: #FFFFFF;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.02em;
+    transition: all 0.1s ease;
+  }
+
+  .nav a:hover {
+    background-color: #FFFFFF;
+    color: #000000;
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .nav {
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+</style>

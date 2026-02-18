@@ -60,26 +60,26 @@ Terraform을 사용하여 AWS에서 PDF 이력서를 호스팅하는 인프라�
 
 ### 작업 목록
 
-- [ ] 7. CloudFront 설정 변경 (포트폴리오 사이트 지원)
-  - [ ] 7.1 cloudfront.tf에서 default_root_object를 index.html로 변경
-  - [ ] 7.2 SPA 라우팅을 위한 custom_error_response 추가 (404 → index.html)
-  - [ ] 7.3 terraform apply로 CloudFront 설정 업데이트
-  - [ ] 7.4 CloudFront 설정 변경 검증
+- [x] 7. CloudFront 설정 변경 (포트폴리오 사이트 지원)
+  - [x] 7.1 cloudfront.tf에서 default_root_object를 index.html로 변경
+  - [x] 7.2 SPA 라우팅을 위한 custom_error_response 추가 (404 → index.html)
+  - [x] 7.3 terraform apply로 CloudFront 설정 업데이트
+  - [x] 7.4 CloudFront 설정 변경 검증
 
-- [ ] 8. Astro 포트폴리오 사이트 개발
-  - [ ] 8.1 Astro 프로젝트 초기화 (portfolio-site/)
-  - [ ] 8.2 반응형 레이아웃 컴포넌트 구현 (모바일/데스크톱)
-  - [ ] 8.3 GitHub Repository URL 표시 섹션 구현
-  - [ ] 8.4 아키텍처 다이어그램 표시 섹션 구현
-  - [ ] 8.5 이력서 PDF 다운로드 링크 구현 (/resume.pdf)
+- [x] 8. Astro 포트폴리오 사이트 개발
+  - [x] 8.1 Astro 프로젝트 초기화 (portfolio-site/)
+  - [x] 8.2 반응형 레이아웃 컴포넌트 구현 (모바일/데스크톱)
+  - [x] 8.3 GitHub Repository URL 표시 섹션 구현
+  - [x] 8.4 아키텍처 다이어그램 표시 섹션 구현
+  - [x] 8.5 이력서 PDF 다운로드 링크 구현 (/resume.pdf)
 
-- [ ] 9. 포트폴리오 사이트 배포 및 검증
-  - [ ] 9.1 Astro 빌드 (npm run build)
-  - [ ] 9.2 기존 S3 버킷에 빌드 결과물 업로드 (aws s3 sync)
-  - [ ] 9.3 CloudFront 캐시 무효화
-  - [ ] 9.4 `https://slow0x.er.ht/` 접근 검증 (포트폴리오 메인)
-  - [ ] 9.5 `https://slow0x.er.ht/resume.pdf` 접근 검증 (이력서)
-  - [ ] 9.6 반응형 디자인 테스트 (모바일/데스크톱)
+- [x] 9. 포트폴리오 사이트 배포 및 검증
+  - [x] 9.1 Astro 빌드 (npm run build)
+  - [x] 9.2 기존 S3 버킷에 빌드 결과물 업로드 (aws s3 sync)
+  - [x] 9.3 CloudFront 캐시 무효화
+  - [x] 9.4 `https://slow0x.er.ht/` 접근 검증 (포트폴리오 메인)
+  - [x] 9.5 `https://slow0x.er.ht/resume.pdf` 접근 검증 (이력서)
+  - [x] 9.6 반응형 디자인 테스트 (모바일/데스크톱)
 
 ### 인프라 변경 사항 (단일 버킷 방식)
 

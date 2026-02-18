@@ -13,8 +13,8 @@ resource "aws_cloudfront_origin_access_control" "resume_oac" {
 
 resource "aws_cloudfront_distribution" "resume_distribution" {
   enabled             = true
-  comment             = "Resume hosting distribution"
-  default_root_object = var.resume_filename
+  comment             = "Resume and Portfolio hosting distribution"
+  default_root_object = "index.html"  # 요구사항 9.5: 포트폴리오 사이트 메인 페이지
   
   # 커스텀 도메인 설정
   aliases = [var.custom_domain]
@@ -47,6 +47,20 @@ resource "aws_cloudfront_distribution" "resume_distribution" {
     geo_restriction {
       restriction_type = "none"
     }
+  }
+
+  # 요구사항 9.6: SPA 라우팅을 위한 커스텀 에러 응답
+  # 404 에러 시 index.html로 리디렉션하여 클라이언트 사이드 라우팅 지원
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
   }
   
   # ACM SSL 인증서 연결

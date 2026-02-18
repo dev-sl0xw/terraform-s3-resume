@@ -48,3 +48,10 @@ terraform.rc
 
 # mcp.json 안에 사용된 github token secret key 유출 방지
 .kiro/settings/mcp.json
+
+# Node.js
+node_modules/
+
+# Build output
+portfolio-site/dist/
+portfolio-site/.astro/

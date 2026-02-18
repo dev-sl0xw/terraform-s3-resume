@@ -1,0 +1,99 @@
+---
+interface Props {
+  imageSrc?: string;
+  imageAlt?: string;
+}
+
+const { imageSrc = '/architecture.png', imageAlt = 'AWS Infrastructure Architecture Diagram' } = Astro.props;
+---
+
+<section id="architecture" class="section architecture-section">
+  <div class="container">
+    <h2 class="section-title">🏗️ Architecture</h2>
+    <div class="architecture-content">
+      <div class="architecture-image">
+        <img src={imageSrc} alt={imageAlt} loading="lazy" />
+      </div>
+      <div class="architecture-description">
+        <h3>AWS Infrastructure</h3>
+        <ul class="tech-stack">
+          <li><strong>S3</strong> - Static file storage (private)</li>
+          <li><strong>CloudFront</strong> - CDN with HTTPS</li>
+          <li><strong>ACM</strong> - SSL/TLS certificate</li>
+          <li><strong>OAC</strong> - Origin Access Control</li>
+          <li><strong>Terraform</strong> - Infrastructure as Code</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .architecture-section {
+    background-color: var(--color-bg);
+  }
+
+  .architecture-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+  }
+
+  .architecture-image {
+    background-color: var(--color-accent-mint);
+    border: var(--border-thick);
+    border-radius: 0;
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-brutal);
+    overflow: hidden;
+  }
+
+  .architecture-image img {
+    width: 100%;
+    height: auto;
+    border: 2px solid #000000;
+  }
+
+  .architecture-description h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+    text-transform: uppercase;
+  }
+
+  .tech-stack {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tech-stack li {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 3px solid #000000;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    transition: all 0.1s ease;
+  }
+
+  .tech-stack li:hover {
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    padding-left: calc(var(--spacing-md) + 4px);
+  }
+
+  .tech-stack li:last-child {
+    border-bottom: 3px solid #000000;
+  }
+
+  .tech-stack strong {
+    color: var(--color-text);
+    font-weight: 800;
+  }
+
+  @media (max-width: 768px) {
+    .architecture-content {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
